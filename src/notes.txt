@@ -1,0 +1,16 @@
+API returns character class and race
+
+Race determines:
+- name options
+- abililty bonus options
+- language options
+- speed
+- skill proficiencies
+- traits
+
+Class determines:
+- hit die
+- weapon proficiencies
+- skill proficiencies
+- saving throws
+- starting equipment
