@@ -1,15 +1,17 @@
 import '../styles/App.css';
 import { useState, useEffect } from 'react';
 import useFetch from '../hooks/use-fetch';
+import { randomIndex } from '../utils.js'
 
 function App() {
-  const baseUrl = `https://www.dnd5eapi.co/api`
+  const baseUrl = `https://www.dnd5eapi.co`
+  const [playerClassUrl, setPlayerClassUrl] = useState();
 
-  const [playerClass, setPlayerClass] = useState(null)
+  const [playerClass, playerClassLoading, playerClassError] = useFetch(`${baseUrl}${playerClassUrl}`);
 
   // ! New states with useFetch hook
-  const [playerRaceOptions, raceOptionsLoading, raceOptionsError] = useFetch(`${baseUrl}/races`);
-  const [playerClassOptions, classOptionsLoading, classOptionsError] = useFetch(`${baseUrl}/classes`)
+  const [playerRaceOptions, raceOptionsLoading, raceOptionsError] = useFetch(`${baseUrl}/api/races`);
+  const [playerClassOptions, classOptionsLoading, classOptionsError] = useFetch(`${baseUrl}/api/classes`);
 
   useEffect(() => {
     console.log(playerRaceOptions);
@@ -17,6 +19,24 @@ function App() {
   useEffect(() => {
     console.log(playerClassOptions);
   }, [playerClassOptions]);
+  useEffect(() => {
+    if (playerClass) {
+      console.log(playerClass);
+    }
+  })
+
+  // todo this is getting called twice, and only works on first call
+  const handleGetCharacter = () => {
+    if (playerClass) {
+      const newOptions = playerClassOptions.results.filter(option => {
+        return option.url !== playerClass.url;
+      });
+      console.log(newOptions);
+      setPlayerClassUrl(randomIndex(newOptions.results).url);
+    } else {
+      setPlayerClassUrl(randomIndex(playerClassOptions.results).url);
+    }
+  };
 
   // useEffect(() => {
   //   const api = async () => {
@@ -28,20 +48,13 @@ function App() {
 
   //   api();
   // }, [])
-  
+
   return (
     <div className="App">
-      {playerClass
-      ? playerClass.proficiencies.map(prof => {
-        return (
-          <ul>
-            <li key={prof.index}>{prof.name}</li>
-          </ul>
-        )
-      })
-      : null}
+      <button onClick={handleGetCharacter}>Randomize!</button>
     </div>
   );
 }
+
 
 export default App;
