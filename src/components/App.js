@@ -27,23 +27,24 @@ function App() {
     }
   }, [playerRace]);
 
-  const handlePlayerStateUpdate = (state, updater) => {
+  const handlePlayerStateUpdate = (state, updater, options) => {
+    // Ensure the user does not receive the same player option twice in a row
     if (state) {
-      const newOptions = playerClassOptions.results.filter(option => {
+      const newOptions = options.results.filter(option => {
         return option.url !== state;
       });
       updater(randomIndex(newOptions).url);
     } else {
-      updater(randomIndex(playerClassOptions.results).url);
+      updater(randomIndex(options.results).url);
     };
   };
 
   const handlePlayerRace = () => {
-    handlePlayerStateUpdate(playerRaceUrl, setPlayerRaceUrl);
+    handlePlayerStateUpdate(playerRaceUrl, setPlayerRaceUrl, playerRaceOptions);
   };
 
   const handlePlayerClass = () => {
-    handlePlayerStateUpdate(playerClassUrl, setPlayerClassUrl);
+    handlePlayerStateUpdate(playerClassUrl, setPlayerClassUrl, playerClassOptions);
   };
 
   const handleGetPlayer = () => {
@@ -54,6 +55,8 @@ function App() {
   return (
     <div className="App">
       <button onClick={handleGetPlayer}>Randomize!</button>
+      {/* // todo Make this more legible! */}
+      {playerClass.proficiency_choices[0].from.map(skill => <p>{skill.name.split('Skill: ').pop()}</p>)}
     </div>
   );
 }
