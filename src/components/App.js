@@ -27,40 +27,33 @@ function App() {
     }
   }, [playerRace]);
 
-  const handleGetCharacter = () => {
-    if (playerClassUrl) {
+  const handlePlayerStateUpdate = (state, updater) => {
+    if (state) {
       const newOptions = playerClassOptions.results.filter(option => {
-        return option.url !== playerClassUrl;
+        return option.url !== state;
       });
-      setPlayerClassUrl(randomIndex(newOptions).url);
+      updater(randomIndex(newOptions).url);
     } else {
-      setPlayerClassUrl(randomIndex(playerClassOptions.results).url);
-    };
-   
-    if (playerRaceUrl) {
-      const newOptions = playerRaceOptions.results.filter(option => {
-        return option.url !== playerRaceUrl;
-      });
-      setPlayerRaceUrl(randomIndex(newOptions).url);
-    } else {
-      setPlayerRaceUrl(randomIndex(playerRaceOptions.results).url);
+      updater(randomIndex(playerClassOptions.results).url);
     };
   };
 
-  // useEffect(() => {
-  //   const api = async () => {
-  //     const response = await fetch(`https://www.dnd5eapi.co/api/classes/fighter`);
-  //     const data = await response.json();
-  //     console.log(data)
-  //     setPlayerClass(data);
-  //   }
+  const handlePlayerRace = () => {
+    handlePlayerStateUpdate(playerRaceUrl, setPlayerRaceUrl);
+  };
 
-  //   api();
-  // }, [])
+  const handlePlayerClass = () => {
+    handlePlayerStateUpdate(playerClassUrl, setPlayerClassUrl);
+  };
+
+  const handleGetPlayer = () => {
+    handlePlayerClass();
+    handlePlayerRace();
+  };
 
   return (
     <div className="App">
-      <button onClick={handleGetCharacter}>Randomize!</button>
+      <button onClick={handleGetPlayer}>Randomize!</button>
     </div>
   );
 }
