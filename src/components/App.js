@@ -5,37 +5,46 @@ import { randomIndex } from '../utils.js'
 
 function App() {
   const baseUrl = `https://www.dnd5eapi.co`
-  const [playerClassUrl, setPlayerClassUrl] = useState();
-
-  const [playerClass, playerClassLoading, playerClassError] = useFetch(`${baseUrl}${playerClassUrl}`);
-
-  // ! New states with useFetch hook
   const [playerRaceOptions, raceOptionsLoading, raceOptionsError] = useFetch(`${baseUrl}/api/races`);
   const [playerClassOptions, classOptionsLoading, classOptionsError] = useFetch(`${baseUrl}/api/classes`);
+  
+  const [playerClassUrl, setPlayerClassUrl] = useState(null);
+  const [playerRaceUrl, setPlayerRaceUrl] = useState(null);
 
-  useEffect(() => {
-    console.log(playerRaceOptions);
-  }, [playerRaceOptions]);
-  useEffect(() => {
-    console.log(playerClassOptions);
-  }, [playerClassOptions]);
+  const [playerClass, playerClassLoading, playerClassError] = useFetch(`${baseUrl}${playerClassUrl}`);
+  const [playerRace, playerRaceLoading, playerRaceError] = useFetch(`${baseUrl}${playerRaceUrl}`);
+
+
+  // * Solely for testing and debugging purposes
   useEffect(() => {
     if (playerClass) {
       console.log(playerClass);
     }
-  })
+  }, [playerClass]);
+  useEffect(() => {
+    if (playerRace) {
+      console.log(playerRace);
+    }
+  }, [playerRace]);
 
-  // todo this is getting called twice, and only works on first call
   const handleGetCharacter = () => {
-    if (playerClass) {
+    if (playerClassUrl) {
       const newOptions = playerClassOptions.results.filter(option => {
-        return option.url !== playerClass.url;
+        return option.url !== playerClassUrl;
       });
-      console.log(newOptions);
-      setPlayerClassUrl(randomIndex(newOptions.results).url);
+      setPlayerClassUrl(randomIndex(newOptions).url);
     } else {
       setPlayerClassUrl(randomIndex(playerClassOptions.results).url);
-    }
+    };
+   
+    if (playerRaceUrl) {
+      const newOptions = playerRaceOptions.results.filter(option => {
+        return option.url !== playerRaceUrl;
+      });
+      setPlayerRaceUrl(randomIndex(newOptions).url);
+    } else {
+      setPlayerRaceUrl(randomIndex(playerRaceOptions.results).url);
+    };
   };
 
   // useEffect(() => {
