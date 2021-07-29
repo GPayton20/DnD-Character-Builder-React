@@ -1,7 +1,9 @@
 import '../styles/App.css';
 import { useState, useEffect } from 'react';
 import useFetch from '../hooks/use-fetch';
-import { randomIndex } from '../utils.js'
+import { randomIndex } from '../utils.js';
+
+import TestProficiencies from './TestProficiencies';
 
 function App() {
   const baseUrl = `https://www.dnd5eapi.co`
@@ -56,7 +58,8 @@ function App() {
     <div className="App">
       <button onClick={handleGetPlayer}>Randomize!</button>
       {/* // todo Make this more legible! */}
-      {playerClass.proficiency_choices[0].from.map(skill => <p>{skill.name.split('Skill: ').pop()}</p>)}
+      {/* {playerClass && playerClass.proficiency_choices[0].from.map(skill => <p>{skill.name.split('Skill: ').pop()}</p>)} */}
+      {playerClass && <TestProficiencies proficiencies={playerClass.proficiency_choices}/>}
     </div>
   );
 }
