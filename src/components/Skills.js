@@ -36,14 +36,19 @@ const Skills = ({ playerRace }) => {
 
   useEffect(() => {
     let newSkills = assignSkills();
-    console.log(newSkills);
     newSkills = addBonuses(newSkills);
-    console.log({newSkills});
-    // setPlayerSkills(newSkills);
+    setPlayerSkills(newSkills);
   }, [playerRace]);
 
   return (
-   <p>Nothing yet!</p>
+   <ul>
+     <li>Strength: {playerSkills.str}</li>
+     <li>Dexterity: {playerSkills.dex}</li>
+     <li>Constitution: {playerSkills.con}</li>
+     <li>Wisdom: {playerSkills.wis}</li>
+     <li>Intelligence: {playerSkills.int}</li>
+     <li>Charisma: {playerSkills.cha}</li>
+   </ul>
   )
 }
 
